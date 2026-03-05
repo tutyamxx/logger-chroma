@@ -1,6 +1,6 @@
 /**
  *  logger-chroma - 🦄 A colorful, developer-friendly Node.js logger with timestamps, emojis, pretty-printed objects, and grouped logs for clear, readable output.
- *  @version: v1.0.2
+ *  @version: v1.0.3
  *  @link: https://github.com/tutyamxx/logger-chroma
  *  @license: MIT
  **/
@@ -39,19 +39,35 @@ const generateLogPrefix = (level, customEmoji, config, depth) => {
     return `${timestampPart}${indent}${emojiPart}${levelConfig.color(`[${levelConfig.label}]`)}`;
 };
 
-const createLoggerFunction = (level) => (message, customEmoji, ...additionalArgs) => {
-    const config = createLoggerFunction.config ?? defaultLoggerConfig;
-    const depth = createLoggerFunction.currentDepth ?? 0;
+const createLoggerFunction = (level) => (...args) => {
+    const config = createLoggerFunction?.config ?? defaultLoggerConfig;
+    const depth = createLoggerFunction?.currentDepth ?? 0;
+
+    let customEmoji = null;
+    let messageArgs = args;
+
+    if (typeof args?.[1] === 'string' && args?.[1]?.length <= 2) {
+        customEmoji = args?.[1];
+        messageArgs = [args?.[0], ...args?.slice(2)];
+    }
+
+    else if (typeof args?.[0] === 'string' && args?.[0]?.length <= 2) {
+        customEmoji = args?.[0];
+        messageArgs = args?.slice(1);
+    }
+
     const prefix = generateLogPrefix(level, customEmoji, config, depth);
 
-    const formattedMessage = [message, ...additionalArgs]
+    const formattedMessage = messageArgs
         ?.map(arg => typeof arg === 'object' ? prettyPrintObject(arg) : arg)
         ?.join(' ')
         ?.split('\n')
         ?.map(line => `${prefix} ${line}`)
         ?.join('\n');
 
-    console.log(formattedMessage);
+    if (formattedMessage) {
+        console.log(formattedMessage);
+    }
 };
 
 const createLogGroup = (groupTitle, groupCallback) => {

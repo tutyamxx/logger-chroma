@@ -112,4 +112,35 @@ describe('Logger Chroma Unit Tests', () => {
             loggerChroma.config.timestampEnabled = original;
         });
     });
+
+    describe('Emoji & Argument Detection', () => {
+        test('Should detect emoji as the first argument', () => {
+            loggerChroma.info('🚀', 'Server started');
+            const output = stripAnsi(logSpy.mock.calls[0][0]);
+
+            expect(output).toContain('🚀 [INFO ] Server started');
+        });
+
+        test('Should detect emoji as the second argument', () => {
+            loggerChroma.info('Connected to DB', '✅');
+            const output = stripAnsi(logSpy.mock.calls[0][0]);
+
+            expect(output).toContain('✅ [INFO ] Connected to DB');
+        });
+
+        test('Should NOT treat a number as an emoji when passed as second argument', () => {
+            loggerChroma.info('Port number:', 3000);
+            const output = stripAnsi(logSpy.mock.calls[0][0]);
+
+            expect(output).toContain('[INFO ] Port number: 3000');
+            expect(output).toMatch(/\]\s{4}\[INFO \]/);
+        });
+
+        test('Should handle multiple arguments correctly with an emoji', () => {
+            loggerChroma.info('User', '👤', { id: 1 }, 'logged in');
+            const output = stripAnsi(logSpy.mock.calls[0][0]);
+
+            expect(output).toContain('👤 [INFO ] User { id: 1 } logged in');
+        });
+    });
 });
