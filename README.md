@@ -10,7 +10,7 @@
 </p>
 
 * 🎨 A lightweight, high-performance Node.js logging utility designed for developers who need to visualize complex, nested operations. `logger-chroma` transforms flat, messy console outputs into a beautiful, structured tree that makes debugging logical flows intuitive.
-* 👨‍💻 Optimized for modern terminals like `Windows Terminal`, `VS Code Integrated Terminal`, and `iTerm2`, `Windows Git Bash Terminal` where box-drawing characters are rendered natively.
+* 👨‍💻 Optimized for modern terminals like `Windows Terminal`, `VS Code Integrated Terminal`, `iTerm2`, and `Windows Git Bash Terminal` where box-drawing characters are rendered natively.
 * ♻️ Works seamlessly with `CommonJS`, `ESM` and `TypeScript`
 
 # 📦 Install via [NPM](https://www.npmjs.com/package/logger-chroma)
