@@ -1,0 +1,50 @@
+{
+  "name": "logger-chroma",
+  "version": "1.0.0",
+  "description": "🦄 A colorful, developer-friendly Node.js logger with timestamps, emojis, pretty-printed objects, and grouped logs for clear, readable output.",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.cjs",
+      "types": "./index.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tutyamxx/logger-chroma.git"
+  },
+  "keywords": [
+    "logger",
+    "logging",
+    "colorful",
+    "pretty",
+    "emoji",
+    "nodejs",
+    "debug",
+    "grouped-logs",
+    "structured-logs",
+    "console",
+    "dev-tools",
+    "readable-logs",
+    "cli",
+    "developer-friendly",
+    "timed-logs"
+  ],
+  "author": "tuty",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tutyamxx/logger-chroma/issues"
+  },
+  "homepage": "https://github.com/tutyamxx/logger-chroma#readme",
+  "dependencies": {
+    "chalk": "^5.6.2"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
+  }
+}
