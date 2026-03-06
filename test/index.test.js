@@ -9,7 +9,6 @@ describe('Logger Chroma Unit Tests', () => {
     beforeEach(() => {
         logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
 
-        // --| Reset depth using the constructor property from your implementation
         const infoFn = loggerChroma.info;
 
         if (infoFn) {

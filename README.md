@@ -19,41 +19,6 @@ $ npm i logger-chroma
 
 - See examples below
 
-## CommonJS (Random example)
-```javascript
-const loggerChroma = require('logger-chroma');
-
-loggerChroma.info('Server started successfully');
-loggerChroma.warn('Low disk space', '⚠️');
-loggerChroma.error('Failed to connect to database', new Error('Connection Timeout'));
-
-// --| Logging objects (automatically pretty-printed via util.inspect)
-const user = { id: 1, name: 'Gemini', roles: ['admin', 'ai'] };
-loggerChroma.debug('Current user context:', user);
-
-// --| Using the grouping feature
-loggerChroma.group('Initialize Module', () => {
-    loggerChroma.info('Loading configuration...');
-
-    // --| Nested Group
-    loggerChroma.group('Database Check', () => {
-        loggerChroma.info('Connecting to PostgreSQL...', '🐘');
-        loggerChroma.info('Connection established.');
-    });
-
-    loggerChroma.info('Module ready.');
-});
-
-// --| Overriding config on the fly
-loggerChroma.config.timestampEnabled = false;
-loggerChroma.info('This log has no timestamp');
-```
-
-<p align="center">
-  <img src="consolelog2.png" alt="Terminal output image">
-</p>
-
-
 ## ESM (Random example)
 ```javascript
 import loggerChroma from 'logger-chroma';
@@ -137,6 +102,40 @@ loggerChroma.info("Server ready to accept requests", "✨");
   <img src="consolelog.png" alt="Terminal output image">
 </p>
 
+## CommonJS (Random example)
+```javascript
+const loggerChroma = require('logger-chroma');
+
+loggerChroma.info('Server started successfully');
+loggerChroma.warn('Low disk space', '⚠️');
+loggerChroma.error('Failed to connect to database', new Error('Connection Timeout'));
+
+// --| Logging objects (automatically pretty-printed via util.inspect)
+const user = { id: 1, name: 'Gemini', roles: ['admin', 'ai'] };
+loggerChroma.debug('Current user context:', user);
+
+// --| Using the grouping feature
+loggerChroma.group('Initialize Module', () => {
+    loggerChroma.info('Loading configuration...');
+
+    // --| Nested Group
+    loggerChroma.group('Database Check', () => {
+        loggerChroma.info('Connecting to PostgreSQL...', '🐘');
+        loggerChroma.info('Connection established.');
+    });
+
+    loggerChroma.info('Module ready.');
+});
+
+// --| Overriding config on the fly
+loggerChroma.config.timestampEnabled = false;
+loggerChroma.info('This log has no timestamp');
+```
+
+<p align="center">
+  <img src="consolelog2.png" alt="Terminal output image">
+</p>
+
 # TypeScript (Random example)
 
 ```javascript
@@ -175,5 +174,5 @@ if (loggerChroma.config) {
 ```
 
 <p align="center">
-  <img src="consolelog2.png" alt="Terminal output image">
+  <img src="tsconsole.png" alt="Terminal output image">
 </p>

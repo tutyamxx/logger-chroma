@@ -1,6 +1,6 @@
 {
   "name": "logger-chroma",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "🦄 A colorful, developer-friendly Node.js logger with timestamps, emojis, pretty-printed objects, and grouped logs for clear, readable output.",
   "type": "module",
   "main": "index.js",
