@@ -9,7 +9,9 @@ describe('Logger Chroma Unit Tests', () => {
     beforeEach(() => {
         logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
 
+        // --| Reset depth using the constructor property from your implementation
         const infoFn = loggerChroma.info;
+
         if (infoFn) {
             Object.getPrototypeOf(infoFn).constructor.currentDepth = 0;
         }
@@ -73,7 +75,7 @@ describe('Logger Chroma Unit Tests', () => {
     describe('Data Formatting', () => {
         test('Should pretty print objects using util.inspect', () => {
             const data = { id: 123, status: 'ok' };
-            loggerChroma.info('Data:', null, data);
+            loggerChroma.info('Data:', data);
 
             const output = stripAnsi(logSpy.mock.calls[0][0]);
             expect(output).toContain('id: 123');
@@ -93,6 +95,17 @@ describe('Logger Chroma Unit Tests', () => {
             expect(lines[1]).toContain('│');
             expect(lines[1]).toContain('Line 2');
         });
+
+        test('Should handle null and undefined arguments safely', () => {
+            loggerChroma.info('Values:', null, undefined);
+            const output = stripAnsi(logSpy.mock.calls[0][0]);
+
+            // --| Matches [YYYY-MM-DD HH:mm:ss] followed by the expected message
+            const timestampRegex = /^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]/;
+
+            expect(output).toMatch(timestampRegex);
+            expect(output).toContain('[INFO] Values: null undefined');
+        });
     });
 
     describe('Edge Cases', () => {
@@ -108,6 +121,7 @@ describe('Logger Chroma Unit Tests', () => {
             loggerChroma.info('No timestamp');
             const output = stripAnsi(logSpy.mock.calls[0][0]);
 
+            // --| Regex to check that string doesn't start with ISO date pattern [YYYY-MM-DD
             expect(output).not.toMatch(/^\[\d{4}-\d{2}-\d{2}/);
             loggerChroma.config.timestampEnabled = original;
         });
@@ -133,7 +147,6 @@ describe('Logger Chroma Unit Tests', () => {
             const output = stripAnsi(logSpy.mock.calls[0][0]);
 
             expect(output).toContain('[INFO] Port number: 3000');
-            expect(output).toMatch(/\[INFO\]/);
         });
 
         test('Should handle multiple arguments correctly with an emoji', () => {

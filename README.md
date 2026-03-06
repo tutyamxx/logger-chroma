@@ -54,7 +54,7 @@ loggerChroma.info('This log has no timestamp');
 </p>
 
 
-## ESM or TypeScript (Random example)
+## ESM (Random example)
 ```javascript
 import loggerChroma from 'logger-chroma';
 
@@ -135,4 +135,45 @@ loggerChroma.info("Server ready to accept requests", "✨");
 ```
 <p align="center">
   <img src="consolelog.png" alt="Terminal output image">
+</p>
+
+# TypeScript (Random example)
+
+```javascript
+import loggerChroma from 'logger-chroma';
+
+loggerChroma.info('Server started successfully');
+loggerChroma.warn('Low disk space', '⚠️');
+loggerChroma.error('Failed to connect to database', new Error('Connection Timeout'));
+
+interface User {
+    id: number;
+    name: string;
+    roles: string[];
+}
+
+const user: User = { id: 1, name: 'Gemini', roles: ['admin', 'ai'] };
+loggerChroma.debug('Current user context:', user);
+
+loggerChroma.group('Initialize Module', () => {
+    loggerChroma.info('Loading configuration...');
+
+    // --| Nested Grouping
+    loggerChroma.group('Database Check', () => {
+        loggerChroma.info('Connecting to PostgreSQL...', '🐘');
+        loggerChroma.info('Connection established.');
+    });
+
+    loggerChroma.info('Module ready.');
+});
+
+
+if (loggerChroma.config) {
+    loggerChroma.config.timestampEnabled = false;
+    loggerChroma.info('This log has no timestamp');
+}
+```
+
+<p align="center">
+  <img src="consolelog2.png" alt="Terminal output image">
 </p>

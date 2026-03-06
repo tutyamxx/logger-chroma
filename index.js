@@ -1,6 +1,6 @@
 /**
  *  logger-chroma - 🦄 A colorful, developer-friendly Node.js logger with timestamps, emojis, pretty-printed objects, and grouped logs for clear, readable output.
- *  @version: v1.0.5
+ *  @version: v1.0.6
  *  @link: https://github.com/tutyamxx/logger-chroma
  *  @license: MIT
  **/
@@ -47,11 +47,18 @@ const createLoggerFunction = (level) => (...args) => {
 
     const customEmoji = [args?.[0], args?.[1]]?.find(arg => typeof arg === 'string' && containsEmoji?.(arg)) ?? null;
 
-    const messageArgs = args?.filter(arg => arg !== customEmoji);
+    const messageArgs = customEmoji
+        ? args?.filter(arg => arg !== customEmoji)
+        : args;
+
     const prefix = generateLogPrefix?.(level, customEmoji, config, depth);
 
     const formattedMessage = messageArgs
-        ?.map(arg => typeof arg === 'object' ? prettyPrintObject?.(arg) : arg)
+        ?.map(arg => {
+            if (arg === null) return 'null';
+            if (arg === undefined) return 'undefined';
+            return typeof arg === 'object' ? prettyPrintObject?.(arg) : arg;
+        })
         ?.join(' ')
         ?.split('\n')
         ?.map(line => `${prefix} ${line}`)
@@ -73,18 +80,17 @@ const createLogGroup = (groupTitle, groupCallback) => {
     }
 
     console.log(`${timestamp}${parentPipes}┌─ ${groupTitle}`);
-
     createLoggerFunction.currentDepth = depth + 1;
 
     if (typeof groupCallback === 'function') {
         groupCallback();
     }
-    createLoggerFunction.currentDepth = depth;
 
+    createLoggerFunction.currentDepth = depth;
     console.log(`${timestamp}${parentPipes}└─ End ${groupTitle}`);
 };
 
-const loggerChroma = {};
+const loggerChroma = { };
 Object.keys(logLevels).forEach(level => loggerChroma[level] = createLoggerFunction(level));
 
 loggerChroma.group = createLogGroup;
