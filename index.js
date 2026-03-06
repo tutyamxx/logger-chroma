@@ -1,6 +1,6 @@
 /**
  *  logger-chroma - 🦄 A colorful, developer-friendly Node.js logger with timestamps, emojis, pretty-printed objects, and grouped logs for clear, readable output.
- *  @version: v1.0.4
+ *  @version: v1.0.5
  *  @link: https://github.com/tutyamxx/logger-chroma
  *  @license: MIT
  **/
@@ -8,17 +8,17 @@
 
 import util from 'util';
 import chalk from 'chalk';
+import containsEmoji from 'contains-emoji';
 
 const logLevels = {
-    info: { color: chalk.green, label: 'INFO ' },
-    warn: { color: chalk.yellow, label: 'WARN ' },
+    info: { color: chalk.green, label: 'INFO' },
+    warn: { color: chalk.yellow, label: 'WARN' },
     error: { color: chalk.red, label: 'ERROR' },
     debug: { color: chalk.blue, label: 'DEBUG' },
 };
 
 const defaultLoggerConfig = {
     timestampEnabled: true,
-    groupIndentSize: 2,
     levelColors: logLevels,
 };
 
@@ -27,6 +27,8 @@ const prettyPrintObject = (obj) => util.inspect(obj, { colors: true, depth: null
 
 const generateLogPrefix = (level, customEmoji, config, depth) => {
     const levelConfig = config.levelColors?.[level] ?? { color: (text) => text, label: level.toUpperCase() };
+
+    // --| If disabled, use an empty string so the log aligns to the far left
     const timestampPart = config.timestampEnabled ? `[${getFormattedTimestamp()}] ` : '';
 
     let indent = '';
@@ -34,7 +36,7 @@ const generateLogPrefix = (level, customEmoji, config, depth) => {
         indent += '│ ';
     }
 
-    const emojiPart = customEmoji ? `${customEmoji} ` : '   ';
+    const emojiPart = customEmoji ? `${customEmoji} ` : '';
 
     return `${timestampPart}${indent}${emojiPart}${levelConfig.color(`[${levelConfig.label}]`)}`;
 };
@@ -43,23 +45,13 @@ const createLoggerFunction = (level) => (...args) => {
     const config = createLoggerFunction?.config ?? defaultLoggerConfig;
     const depth = createLoggerFunction?.currentDepth ?? 0;
 
-    let customEmoji = null;
-    let messageArgs = args;
+    const customEmoji = [args?.[0], args?.[1]]?.find(arg => typeof arg === 'string' && containsEmoji?.(arg)) ?? null;
 
-    if (typeof args?.[1] === 'string' && args?.[1]?.length <= 2) {
-        customEmoji = args?.[1];
-        messageArgs = [args?.[0], ...args?.slice(2)];
-    }
-
-    else if (typeof args?.[0] === 'string' && args?.[0]?.length <= 2) {
-        customEmoji = args?.[0];
-        messageArgs = args?.slice(1);
-    }
-
-    const prefix = generateLogPrefix(level, customEmoji, config, depth);
+    const messageArgs = args?.filter(arg => arg !== customEmoji);
+    const prefix = generateLogPrefix?.(level, customEmoji, config, depth);
 
     const formattedMessage = messageArgs
-        ?.map(arg => typeof arg === 'object' ? prettyPrintObject(arg) : arg)
+        ?.map(arg => typeof arg === 'object' ? prettyPrintObject?.(arg) : arg)
         ?.join(' ')
         ?.split('\n')
         ?.map(line => `${prefix} ${line}`)

@@ -5,10 +5,6 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
 </p>
 
-<p align="center">
-  <img src="terminal.png" alt="Terminal output image">
-</p>
-
 * 🎨 A lightweight, high-performance Node.js logging utility designed for developers who need to visualize complex, nested operations. `logger-chroma` transforms flat, messy console outputs into a beautiful, structured tree that makes debugging logical flows intuitive.
 * 👨‍💻 Optimized for modern terminals like `Windows Terminal`, `VS Code Integrated Terminal`, `iTerm2`, and `Windows Git Bash Terminal` where box-drawing characters are rendered natively.
 * ♻️ Works seamlessly with `CommonJS`, `ESM` and `TypeScript`
@@ -23,14 +19,42 @@ $ npm i logger-chroma
 
 - See examples below
 
-## CommonJS
+## CommonJS (Random example)
 ```javascript
 const loggerChroma = require('logger-chroma');
 
-// --| Same code as below in ESM and TypeScript
+loggerChroma.info('Server started successfully');
+loggerChroma.warn('Low disk space', '⚠️');
+loggerChroma.error('Failed to connect to database', new Error('Connection Timeout'));
+
+// --| Logging objects (automatically pretty-printed via util.inspect)
+const user = { id: 1, name: 'Gemini', roles: ['admin', 'ai'] };
+loggerChroma.debug('Current user context:', user);
+
+// --| Using the grouping feature
+loggerChroma.group('Initialize Module', () => {
+    loggerChroma.info('Loading configuration...');
+
+    // --| Nested Group
+    loggerChroma.group('Database Check', () => {
+        loggerChroma.info('Connecting to PostgreSQL...', '🐘');
+        loggerChroma.info('Connection established.');
+    });
+
+    loggerChroma.info('Module ready.');
+});
+
+// --| Overriding config on the fly
+loggerChroma.config.timestampEnabled = false;
+loggerChroma.info('This log has no timestamp');
 ```
 
-## ESM or TypeScript
+<p align="center">
+  <img src="consolelog2.png" alt="Terminal output image">
+</p>
+
+
+## ESM or TypeScript (Random example)
 ```javascript
 import loggerChroma from 'logger-chroma';
 
@@ -109,3 +133,6 @@ try {
 // --| Final server ready message
 loggerChroma.info("Server ready to accept requests", "✨");
 ```
+<p align="center">
+  <img src="consolelog.png" alt="Terminal output image">
+</p>

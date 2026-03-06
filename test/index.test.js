@@ -22,7 +22,7 @@ describe('Logger Chroma Unit Tests', () => {
             loggerChroma.info('Hello World');
             const output = stripAnsi(logSpy.mock.calls[0][0]);
 
-            expect(output).toContain('[INFO ]');
+            expect(output).toContain('[INFO]');
             expect(output).toContain('Hello World');
         });
 
@@ -33,7 +33,7 @@ describe('Logger Chroma Unit Tests', () => {
             const outA = stripAnsi(logSpy.mock.calls[0][0]);
             const outB = stripAnsi(logSpy.mock.calls[1][0]);
 
-            expect(outA.indexOf('[INFO ]')).toBe(outB.indexOf('[INFO ]'));
+            expect(outA.indexOf('[INFO]')).toBe(outB.indexOf('[INFO]'));
         });
     });
 
@@ -118,29 +118,29 @@ describe('Logger Chroma Unit Tests', () => {
             loggerChroma.info('🚀', 'Server started');
             const output = stripAnsi(logSpy.mock.calls[0][0]);
 
-            expect(output).toContain('🚀 [INFO ] Server started');
+            expect(output).toContain('🚀 [INFO] Server started');
         });
 
         test('Should detect emoji as the second argument', () => {
             loggerChroma.info('Connected to DB', '✅');
             const output = stripAnsi(logSpy.mock.calls[0][0]);
 
-            expect(output).toContain('✅ [INFO ] Connected to DB');
+            expect(output).toContain('✅ [INFO] Connected to DB');
         });
 
         test('Should NOT treat a number as an emoji when passed as second argument', () => {
             loggerChroma.info('Port number:', 3000);
             const output = stripAnsi(logSpy.mock.calls[0][0]);
 
-            expect(output).toContain('[INFO ] Port number: 3000');
-            expect(output).toMatch(/\]\s{4}\[INFO \]/);
+            expect(output).toContain('[INFO] Port number: 3000');
+            expect(output).toMatch(/\[INFO\]/);
         });
 
         test('Should handle multiple arguments correctly with an emoji', () => {
             loggerChroma.info('User', '👤', { id: 1 }, 'logged in');
             const output = stripAnsi(logSpy.mock.calls[0][0]);
 
-            expect(output).toContain('👤 [INFO ] User { id: 1 } logged in');
+            expect(output).toContain('👤 [INFO] User { id: 1 } logged in');
         });
     });
 });

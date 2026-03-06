@@ -1,3 +1,20 @@
+import { ChalkInstance } from 'chalk';
+
+/**
+ * Configuration for a single log level.
+ */
+export interface LevelConfig {
+    /**
+     * Function to colorize the log text. Usually a Chalk instance.
+     */
+    color?: ((text: string) => string) | ChalkInstance;
+
+    /**
+     * Label displayed in square brackets in the log prefix.
+     */
+    label: string;
+}
+
 /**
  * Configuration options for LoggerChroma.
  */
@@ -5,36 +22,14 @@ export interface LoggerConfig {
     /**
      * Show timestamps in the log output.
      * @default true
-     * Note: timestamps are always enabled in the current version.
      */
     timestampEnabled?: boolean;
 
     /**
-     * Number of spaces used for indenting grouped logs.
-     * @default 2
-     */
-    groupIndentSize?: number;
-
-    /**
      * Custom color and label configuration per log level.
-     * Key is the log level name (`info`, `warn`, `error`, `debug`, etc.).
+     * Key is the log level name (`info`, `warn`, `error`, `debug`).
      */
     levelColors?: Record<string, LevelConfig>;
-}
-
-/**
- * Configuration for a single log level.
- */
-export interface LevelConfig {
-    /**
-     * Function to colorize the log text. Defaults to identity function.
-     */
-    color?: (text: string) => string;
-
-    /**
-     * Label displayed in square brackets in the log prefix.
-     */
-    label: string;
 }
 
 /**
@@ -70,12 +65,7 @@ export interface LoggerChroma {
 
     /**
      * Creates a grouped log section.
-     *
-     * Inner log lines are automatically prefixed with `| ` and indented according to `config.groupIndentSize`.
-     * Nested groups are fully supported; each level increases indentation.
-     *
-     * @param title - The title of the log group.
-     * @param callback - Function that contains logs to be grouped.
+     * Inner log lines are automatically prefixed with `│ ` and indented.
      */
     group: (title: string, callback?: () => void) => void;
 
